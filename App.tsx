@@ -1,20 +1,34 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useFonts } from "expo-font";
+import { StatusBar } from "expo-status-bar";
+import "intl";
+import "intl/locale-data/jsonp/pt-BR";
+import { Main } from "./src/Main";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { NavigationContainer } from "@react-navigation/native";
+
+const Drawer = createDrawerNavigator();
 
 export default function App() {
+  const [isFontsLoaded] = useFonts({
+    "GeneralSans-400": require("./assets/fonts/GeneralSans-Regular.otf"),
+    "GeneralSans-600": require("./assets/fonts/GeneralSans-Semibold.otf"),
+    "GeneralSans-700": require("./assets/fonts/GeneralSans-Bold.otf"),
+  });
+
+  if (!isFontsLoaded) {
+    return null;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Drawer.Navigator initialRouteName="Home">
+        <Drawer.Screen
+          options={{ headerShown: false }}
+          name="Home"
+          component={Main}
+        />
+      </Drawer.Navigator>
+      <StatusBar style="dark" />
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
